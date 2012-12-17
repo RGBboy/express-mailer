@@ -5,7 +5,10 @@
   "homepage": "https://github.com/RGBboy/express-mailer",
   "keywords": ["express", "email", "mail", "smtp", "middleware"],
   "author": "RGBboy <me@rgbboy.com>",
-  "repository": "git://github.com/RGBboy/express-mailer",
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/RGBboy/express-mailer"
+  },
   "main": "index",
   "engines": {
     "node": "0.8.x"
