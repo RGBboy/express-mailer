@@ -1,18 +1,27 @@
 # express-mailer
 
-  Send Emails from the response object.
+Send Emails from the response object.
 
-  [![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
+[![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
+
+## Note
+
+If you have updated express-mailer from Version 0.0.2 or earlier there 
+have been major API changes. Express Mailer now uses the extension 
+pattern and acts off the application object. Usage instructions are 
+detailed below. The change now allows you to send emails from outside of 
+your routes. For example you could now emit an event from your model and 
+have your application respond with an email.
 
 ## Installation
 
-  Works with Express 3.0.x
+Works with Express 3.0.x
 
     $ npm install express-mailer
 
 ## Usage
 
-  Express Mailer returns a middleware function.
+Express Mailer extends your express application
 
 ```javascript
 // project/app.js
@@ -20,7 +29,7 @@
 var app = require('express')(),
     mailer = require('express-mailer');
 
-app.use(mailer({
+mailer.extend(app, {
   from: 'no-reply@example.com',
   host: 'smtp.gmail.com', // hostname
   secureConnection: true, // use SSL
@@ -28,15 +37,15 @@ app.use(mailer({
   auth: {
     user: 'gmail.user@gmail.com',
     pass: 'userpass'
-  }
-}));
+});
+
 ```
 
 ## Views
 
-  Mailer views use the same render process as Express. You can use any view engine that Express supports.
-  Setting up views for mailer is exactly the same as setting up views for Express. For example, to set the
-  view directory to `project/views` and view engine to `jade` you would write:
+Mailer views use the same render process as Express. You can use any view engine that Express supports.
+Setting up views for mailer is exactly the same as setting up views for Express. For example, to set the
+view directory to `project/views` and view engine to `jade` you would write:
 
 ```javascript
 // project/app.js
@@ -45,7 +54,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 ```
 
-  Then we can write our templates in Jade:
+Then we can write our templates in Jade:
 
 ```javascript
 // project/views/email.jade
@@ -73,12 +82,12 @@ html
 
 ## Sending an email
 
-  You can send an email by calling `res.sendEmail(template, options, callback)` from within a middleware function.
-  To send an email using the template above you could write:
+You can send an email by calling `app.sendEmail(template, options, callback)`.
+To send an email using the template above you could write:
 
 ```javascript
 app.get('/', function (req, res, next) {
-  res.sendEmail('email', {
+  res.app.sendEmail('email', {
     to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
     subject: 'Test Email', // REQUIRED.
     otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
@@ -94,15 +103,15 @@ app.get('/', function (req, res, next) {
 });
 ```
 
-## To Do
-
-  * Is res.sendEmail a good idea? what about app.sendEmail, with the ability to curry the options later?
-  * Remove boilerplate from example???
-
 ## Notes
 
-  Mailchimp has a bunch of templates that may be a good starting point.
-  Check them out at https://github.com/mailchimp/Email-Blueprints
+Mailchimp has a bunch of templates that may be a good starting point.
+Check them out at https://github.com/mailchimp/Email-Blueprints
+
+## To Do
+
+* Add ability to curry the from address.
+* Add checking of options when .sendEmail is called.
 
 ## License 
 
