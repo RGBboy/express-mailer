@@ -6,7 +6,7 @@
  * Module Dependencies
  */
 
-var Mailer = require('../lib/express-mailer'),
+var mailer = require('../lib/express-mailer'),
     rewire = require('rewire'),
     should = require('should'),
     sinon = require('sinon');
@@ -34,19 +34,16 @@ describe('Mailer', function () {
       },
       fakeHTML = '<html><head><title>Test Email</title></head><body><h1>Title</h1><p>Lorem ipsum.</p></body></html>';
 
-  describe('({options})', function () {
+  describe('.extend()', function () {
 
-    var middleware;
+    var app;
 
     beforeEach(function (done) {
       fakes = sinon.sandbox.create();
 
-      fakeReq = fakes.stub();
-      fakeReq.app = fakes.stub();
-      fakeReq.app.render = fakes.stub();
-      fakeReq.app.render.callsArgWith(2, null, fakeHTML);
-
-      fakeRes = fakes.stub();
+      app = fakes.stub();
+      app.render = fakes.stub();
+      app.render.callsArgWith(2, null, fakeHTML);
 
       fakeSMTPTransport = fakes.stub();
       fakeSMTPTransport.sendMail = fakes.stub();
@@ -54,44 +51,44 @@ describe('Mailer', function () {
 
       fakeNodemailer = fakes.stub();
       fakeNodemailer.createTransport = fakes.stub().returns(fakeSMTPTransport);
-      Mailer = rewire('../lib/express-mailer');
-      Mailer.__set__('nodemailer', fakeNodemailer);
+      mailer = rewire('../lib/express-mailer');
+      mailer.__set__('nodemailer', fakeNodemailer);
 
-      middleware = Mailer(mailerOptions);
       done();
     });
 
     afterEach(function (done) {
       fakes.restore();
-      Mailer = require('../lib/express-mailer');
+      mailer = require('../lib/express-mailer');
       done();
     });
 
-    it('should return a middleware function', function (done) {
-      middleware.should.be.a('function');
+    it('should be a function', function (done) {
+      mailer.extend.should.be.a('function');
       done();
     });
 
-    it('should create an SMTP Transport Object with \'SMTP\' and the options', function (done) {
-      fakeNodemailer.createTransport.called.should.be.true;
-      fakeNodemailer.createTransport.calledWith('SMTP', mailerOptions).should.be.true;
+    it('should attach a .sendEmail function to the application', function (done) {
+      mailer.extend(app, mailerOptions);
+      app.sendEmail.should.be.a('function');
       done();
     });
 
-    describe('middleware', function () {
-
-      beforeEach(function (done) {
-        middleware(fakeReq, fakeRes, done);
-      });
-
-      it('should attach a .sendEmail function to the response object', function (done) {
-        fakeRes.sendEmail.should.be.a('function');
-        done();
-      });
-
+    it('should throw if the application has already been extended', function (done) {
+      mailer.extend(app, mailerOptions);
+      (function () {
+        mailer.extend(app, mailerOptions)
+      }).should.throw();
+      done();
     });
 
-    describe('response.sendEmail', function () {
+    it('should return the application', function (done) {
+      var returnValue = mailer.extend(app, mailerOptions);
+      returnValue.should.equal(app);
+      done();
+    });
+
+    describe('app.sendEmail', function () {
 
       var sendEmail,
           sendOptions = {
@@ -101,10 +98,9 @@ describe('Mailer', function () {
           };
 
       beforeEach(function (done) {
-        middleware(fakeReq, fakeRes, function() {
-          sendEmail = fakeRes.sendEmail;
-          done();
-        });
+        mailer.extend(app, mailerOptions);
+        sendEmail = app.sendEmail;
+        done();
       });
 
       it('should callback', function (done) {
@@ -113,14 +109,14 @@ describe('Mailer', function () {
 
       it('should call application.render with template and options', function (done) {
         sendEmail('template', sendOptions, function (err) {
-          fakeReq.app.render.calledOnce.should.be.true;
-          fakeReq.app.render.calledWith('template', sendOptions);
+          app.render.calledOnce.should.be.true;
+          app.render.calledWith('template', sendOptions);
           done(err);
         });
       });
 
       it('should callback with error if application.render fails', function (done) {
-        fakeReq.app.render.callsArgWith(2, new Error());
+        app.render.callsArgWith(2, new Error());
         sendEmail('template', sendOptions, function (err) {
           err.should.exist;
           fakeSMTPTransport.sendMail.called.should.be.false;
