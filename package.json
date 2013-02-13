@@ -1,9 +1,9 @@
 {
   "name": "express-mailer",
-  "version": "0.0.2",
-  "description": "Send Emails from the response object",
+  "version": "0.1.0",
+  "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",
-  "keywords": ["express", "email", "mail", "smtp", "middleware"],
+  "keywords": ["express", "email", "mail", "smtp"],
   "author": "RGBboy <me@rgbboy.com>",
   "repository" : {
     "type" : "git",
