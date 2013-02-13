@@ -11,6 +11,13 @@ var express = require('express'),
     mailer = require('../index'),
     config = require('./config');
 
+mailer.extend(app, config.mailer);
+
+app.locals.testVariable = 'Test Variable';
+app.locals.testFunction = function () {
+  return 'Test Function';
+};
+
 // Views
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
@@ -19,8 +26,6 @@ app.set('view engine', 'jade');
 
 app.use(express.bodyParser());
 app.use(express.static(__dirname + '/public'));
-
-app.use(mailer(config.mailer));
 
 app.get('/', function (req, res) {
   res.render('index', {
@@ -36,21 +41,24 @@ app.get('/send-mail', function (req, res) {
 
 app.post('/send-mail', function (req, res) {
 
-  var email = req.body.user.email;
+  if(!req.body.user || !req.body.user.email) {
+    res.redirect('back');
+    return;
+  };
 
-  res.sendEmail('email', {
-    to: email,
+  res.app.sendEmail('email', {
+    to: req.body.user.email,
     subject: 'Test Email'
   },
   function (err) {
     if (err) {
+      console.log('Sending Mail Failed!');
       console.log(err);
-      res.redirect('/send-mail');
       return;
-    }
+    };
     res.redirect('/');
   });
-  
+
 });
 
 // Error Handler
