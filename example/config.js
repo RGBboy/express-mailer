@@ -8,8 +8,8 @@ var config = {
       secureConnection: true, // use SSL
       port: 465, // port for secure SMTP
       auth: {
-        user: 'gmail.user@gmail.com',
-        pass: 'gmailPassword'
+        user: process.env.GMAIL_USERNAME,
+        pass: process.env.GMAIL_PASSWORD
       }
     }
   },
