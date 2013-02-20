@@ -50,9 +50,13 @@ describe('Mailer', function () {
     beforeEach(function (done) {
       fakes = sinon.sandbox.create();
 
+      fakeReq = fakes.stub();
+      fakeRes = fakes.stub();
+
       app = fakes.stub();
       app.render = fakes.stub();
       app.render.callsArgWith(2, null, fakeHTML);
+      app.use = fakes.stub();
 
       fakeSMTPTransport = fakes.stub();
       fakeSMTPTransport.sendMail = fakes.stub();
@@ -152,6 +156,33 @@ describe('Mailer', function () {
           err.should.exist;
           done();
         });
+      });
+
+    });
+
+    describe('middleware res.sendEmail', function () {
+
+      var sendEmail,
+          sendOptions = {
+            to: 'TestUser@localhost',
+            subject: 'Test Subject',
+            testProperty: 'testProperty'
+          };
+
+      beforeEach(function (done) {
+        mailer.extend(app, mailerOptions);
+        sendEmail = app.sendEmail;
+        done();
+      });
+
+      it('should equal app.sendEmail', function (done) {
+        app.use.calledOnce.should.be.true;
+        var middleware = app.use.args[0][0];
+        middleware(fakeReq, fakeRes, function (err) {
+          fakeRes.sendEmail.should.equal(app.sendEmail);
+          should.not.exist(err);
+          done();
+        })
       });
 
     });

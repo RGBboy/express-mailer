@@ -48,7 +48,7 @@ describe('Mailer', function () {
     });
   })
 
-  describe('POST /send-mail', function () {
+  describe('POST /send-mail-via-app', function () {
 
     it('should send mail to me', function (done) {
 
@@ -58,7 +58,32 @@ describe('Mailer', function () {
       });
 
       request
-        .post(baseURL + '/send-mail')
+        .post(baseURL + '/send-mail-via-app')
+        .send({ 
+          user: {
+            email: fakeEmail
+          }
+        })
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+    });
+
+  });
+
+  describe('POST /send-mail-via-res', function () {
+
+    it('should send mail to me', function (done) {
+
+      mailbox.once('newMail', function (mail) {
+        mail.html.should.include('<title>Test Email</title>');
+        done();
+      });
+
+      request
+        .post(baseURL + '/send-mail-via-res')
         .send({ 
           user: {
             email: fakeEmail
