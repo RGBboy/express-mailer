@@ -34,6 +34,7 @@ mailer.extend(app, {
   host: 'smtp.gmail.com', // hostname
   secureConnection: true, // use SSL
   port: 465, // port for secure SMTP
+  transportMethod: 'SMTP' // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'gmail.user@gmail.com',
     pass: 'userpass'
@@ -91,8 +92,7 @@ app.get('/', function (req, res, next) {
   app.sendEmail('email', {
     to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
     subject: 'Test Email', // REQUIRED.
-    otherProperty: 'Other Property', // All additional properties are also passed to the template as local variables.
-    transportMethod: 'SMTP' // default is SMTP. Accepts anything that nodemailer accepts
+    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
   }, function (err) {
     if (err) {
       // handle error
