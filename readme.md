@@ -91,6 +91,7 @@ app.get('/', function (req, res, next) {
     to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
     subject: 'Test Email', // REQUIRED.
     otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
+    transportMethod: 'SMTP' // default is SMTP. Accepts anything that nodemailer accepts
   }, function (err) {
     if (err) {
       // handle error
