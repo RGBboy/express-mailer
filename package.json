@@ -5,6 +5,10 @@
   "homepage": "https://github.com/RGBboy/express-mailer",
   "keywords": ["express", "email", "mail", "smtp"],
   "author": "RGBboy <me@rgbboy.com>",
+  "contributors": [{
+    "name": "Daniel Bretoi",
+    "email": "daniel@bretoi.com"
+  }],
   "repository" : {
     "type" : "git",
     "url" : "http://github.com/RGBboy/express-mailer"
