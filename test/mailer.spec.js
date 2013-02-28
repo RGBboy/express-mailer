@@ -123,13 +123,13 @@ describe('Mailer render', function() {
   });
 
   it('Should render an email', function(done) {
+    app.locals.pretty = true
     app.renderEmail('email', {
       to: 'test@example.com',
       subject: 'Test Email' },
       function (err, renderedMail) {
         var contents = fs.readFileSync('test/rendered_mail.html') // reading file leaves trailing \n bug in node?
-        var tmp = renderedMail + "\n"
-        tmp.should.equal(contents.toString())
+        renderedMail.should.equal(contents.toString())
         done();
       })
   });
