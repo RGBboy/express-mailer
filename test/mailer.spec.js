@@ -10,6 +10,7 @@ var app = require('../example/app'),
     should = require('should'),
     request = require('superagent'),
     Mailbox = require('test-mailbox'),
+    fs = require('fs'),
     config = require('../example/config');
 
 /**
@@ -98,4 +99,38 @@ describe('Mailer', function () {
 
   });
 
+});
+
+describe('Mailer render', function() {
+  var app;
+  before(function (done) {
+    app = require("express")();
+    require('jade');
+    app.set('views', __dirname + '/../example/views');
+    app.set('view engine', 'jade');
+    app.locals.testVariable = 'Test Variable';
+    app.locals.testFunction = function () {
+      return 'Test Function';
+    };
+    var mailer = require("../index");
+    mailer.extend(app, {
+      from: "testmail@blah.com",
+      host: "localhost",
+      transportMethod: 'sendmail'
+    });
+    done();
+
+  });
+
+  it('Should render an email', function(done) {
+    app.renderEmail('email', {
+      to: 'test@example.com',
+      subject: 'Test Email' },
+      function (err, renderedMail) {
+        var contents = fs.readFileSync('test/rendered_mail.html') // reading file leaves trailing \n bug in node?
+        var tmp = renderedMail + "\n"
+        tmp.should.equal(contents.toString())
+        done();
+      })
+  });
 });
