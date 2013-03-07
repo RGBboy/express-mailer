@@ -9,9 +9,10 @@
 var express = require('express'),
     app = module.exports = express(),
     mailer = require('../index'),
-    config = require('./config');
+    config = require('./config')
+    currentMailerOptions = config.mailer;
 
-mailer.extend(app, config.mailer);
+mailer.extend(app, currentMailerOptions);
 
 app.locals.testVariable = 'Test Variable';
 app.locals.testFunction = function () {
@@ -32,6 +33,8 @@ app.get('/', function (req, res) {
     title: 'Home'
   });
 });
+
+// Send mail via the application object:
 
 app.get('/send-mail-via-app', function (req, res) {
   res.render('send-mail-via-app', {
@@ -61,6 +64,8 @@ app.post('/send-mail-via-app', function (req, res) {
 
 });
 
+// Send mail via the response object:
+
 app.get('/send-mail-via-res', function (req, res) {
   res.render('send-mail-via-res', {
     title: 'Send Mail Via Response'
@@ -86,6 +91,49 @@ app.post('/send-mail-via-res', function (req, res) {
     };
     res.redirect('/');
   });
+
+});
+
+// Send mail via an updated mailer object:
+
+app.get('/send-mail-with-update', function (req, res) {
+  res.render('send-mail-via-update', {
+    title: 'Send Mail With Update'
+  });
+});
+
+app.post('/send-mail-with-update', function (req, res, next) {
+
+  if(!req.body.user || !req.body.user.email) {
+    res.redirect('back');
+    return;
+  };
+
+  if (currentMailerOptions === config.mailer) {
+    currentMailerOptions = config.mailerUpdate;
+  } else {
+    currentMailerOptions = config.mailer;
+  };
+
+  app.mailer.update(currentMailerOptions, function (err) {
+    if (err) {
+      console.log('Updating Mailer Failed!');
+      console.log(err);
+      return;
+    };
+    app.mailer.send('email', {
+      to: req.body.user.email,
+      subject: 'Test Email'
+    },
+    function (err) {
+      if (err) {
+        console.log('Sending Mail Failed!');
+        console.log(err);
+        return;
+      };
+      res.redirect('/');
+    });
+  })
 
 });
 

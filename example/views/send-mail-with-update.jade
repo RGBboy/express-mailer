@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  form.send-mail.form-horizontal(action = '/send-mail-with-update', method = 'post')
+    .control-group
+      label.control-label(for = 'user-email') Email:
+      .controls
+        input#user-email(type = 'email', name='user[email]', placeholder = 'Email')
+    .form-actions
+      button.btn(type = 'submit') Send Mail

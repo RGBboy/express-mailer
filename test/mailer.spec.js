@@ -98,4 +98,31 @@ describe('Mailer', function () {
 
   });
 
+  describe('POST /send-mail-with-update', function () {
+
+    it('should send mail to me with updated settings', function (done) {
+
+      mailbox.once('newMail', function (mail) {
+        mail.from[0].address.should.equal(config.mailerUpdate.from);
+        mail.from[0].address.should.not.equal(config.mailer.from);
+        mail.html.should.include('<title>Test Email</title>');
+        done();
+      });
+
+      request
+        .post(baseURL + '/send-mail-with-update')
+        .send({ 
+          user: {
+            email: fakeEmail
+          }
+        })
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+        });
+    });
+
+  });
+
 });
