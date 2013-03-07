@@ -15,7 +15,7 @@ have your application respond with an email.
 
 ## Installation
 
-Works with Express 3.0.x
+Works with Express 3.x.x
 
     $ npm install express-mailer
 

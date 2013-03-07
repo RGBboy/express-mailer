@@ -21,7 +21,7 @@
     "nodemailer": "0.3.x"
   },
   "devDependencies": {
-    "express": "3.0.x",
+    "express": "3.x.x",
     "jade": "0.27.x",
     "mocha": "1.5.x",
     "superagent": "0.9.x",
