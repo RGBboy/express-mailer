@@ -223,7 +223,7 @@ describe('Mailer', function () {
         done();
       });
 
-      it('should equal app.sendEmail', function (done) {
+      it('should equal app.mailer', function (done) {
         app.use.calledOnce.should.be.true;
         var middleware = app.use.args[0][0];
         middleware(fakeReq, fakeRes, function (err) {
