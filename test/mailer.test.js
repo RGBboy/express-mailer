@@ -83,7 +83,7 @@ describe('Mailer', function () {
 
     it('should attach a .sendEmail function to the application', function (done) {
       mailer.extend(app, mailerOptions);
-      app.sendEmail.should.be.a('function');
+      app.mailer.should.be.a('object');
       done();
     });
 
@@ -101,77 +101,77 @@ describe('Mailer', function () {
       done();
     });
 
-    describe('app.sendEmail', function () {
+    describe('app.mailer', function () {
 
-      var sendEmail,
-          sendOptions = {
-            to: 'TestUser@localhost',
-            subject: 'Test Subject',
-            testProperty: 'testProperty'
-          };
-
-      beforeEach(function (done) {
-        mailer.extend(app, mailerOptions);
-        sendEmail = app.sendEmail;
+      it('should exist', function (done) {
+        
         done();
       });
 
-      it('should callback', function (done) {
-        sendEmail('template', sendOptions, done);
-      });
+      describe('.send', function () {
 
-      it('should call application.render with template and options', function (done) {
-        sendEmail('template', sendOptions, function (err) {
-          app.render.calledOnce.should.be.true;
-          app.render.calledWith('template', sendOptions);
-          done(err);
-        });
-      });
+        var send,
+            sendOptions = {
+              to: 'TestUser@localhost',
+              subject: 'Test Subject',
+              testProperty: 'testProperty'
+            };
 
-      it('should callback with error if application.render fails', function (done) {
-        app.render.callsArgWith(2, new Error());
-        sendEmail('template', sendOptions, function (err) {
-          err.should.exist;
-          fakeSMTPTransport.sendMail.called.should.be.false;
+        beforeEach(function (done) {
+          mailer.extend(app, mailerOptions);
           done();
         });
-      });
 
-      it('should call smtpTransport.sendMail with correct options', function (done) {
-        sendEmail('template', sendOptions, function (err) {
-          fakeSMTPTransport.sendMail.calledOnce.should.be.true;
-          var args = fakeSMTPTransport.sendMail.args[0][0];
-          args.from.should.equal(mailerOptions.from)
-          args.to.should.equal(sendOptions.to)
-          args.subject.should.equal(sendOptions.subject)
-          args.generateTextFromHTML.should.be.true;
-          args.html.should.equal(fakeHTML);
-          done(err);
+        it('should callback', function (done) {
+          app.mailer.send('template', sendOptions, done);
         });
-      });
 
-      it('should callback with error if smtpTransport.sendMail fails', function (done) {
-        fakeSMTPTransport.sendMail.callsArgWith(1, new Error());
-        sendEmail('template', sendOptions, function (err) {
-          err.should.exist;
-          done();
+        it('should call application.render with template and options', function (done) {
+          app.mailer.send('template', sendOptions, function (err) {
+            app.render.calledOnce.should.be.true;
+            app.render.calledWith('template', sendOptions);
+            done(err);
+          });
         });
+
+        it('should callback with error if application.render fails', function (done) {
+          app.render.callsArgWith(2, new Error());
+          app.mailer.send('template', sendOptions, function (err) {
+            err.should.exist;
+            fakeSMTPTransport.sendMail.called.should.be.false;
+            done();
+          });
+        });
+
+        it('should call smtpTransport.sendMail with correct options', function (done) {
+          app.mailer.send('template', sendOptions, function (err) {
+            fakeSMTPTransport.sendMail.calledOnce.should.be.true;
+            var args = fakeSMTPTransport.sendMail.args[0][0];
+            args.from.should.equal(mailerOptions.from)
+            args.to.should.equal(sendOptions.to)
+            args.subject.should.equal(sendOptions.subject)
+            args.generateTextFromHTML.should.be.true;
+            args.html.should.equal(fakeHTML);
+            done(err);
+          });
+        });
+
+        it('should callback with error if smtpTransport.sendMail fails', function (done) {
+          fakeSMTPTransport.sendMail.callsArgWith(1, new Error());
+          app.mailer.send('template', sendOptions, function (err) {
+            err.should.exist;
+            done();
+          });
+        });
+
       });
 
     });
 
-    describe('middleware res.sendEmail', function () {
-
-      var sendEmail,
-          sendOptions = {
-            to: 'TestUser@localhost',
-            subject: 'Test Subject',
-            testProperty: 'testProperty'
-          };
+    describe('middleware res.mailer', function () {
 
       beforeEach(function (done) {
         mailer.extend(app, mailerOptions);
-        sendEmail = app.sendEmail;
         done();
       });
 
@@ -179,7 +179,7 @@ describe('Mailer', function () {
         app.use.calledOnce.should.be.true;
         var middleware = app.use.args[0][0];
         middleware(fakeReq, fakeRes, function (err) {
-          fakeRes.sendEmail.should.equal(app.sendEmail);
+          fakeRes.mailer.should.equal(app.mailer);
           should.not.exist(err);
           done();
         })

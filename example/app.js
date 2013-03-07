@@ -46,7 +46,7 @@ app.post('/send-mail-via-app', function (req, res) {
     return;
   };
 
-  app.sendEmail('email', {
+  app.mailer.send('email', {
     to: req.body.user.email,
     subject: 'Test Email'
   },
@@ -74,7 +74,7 @@ app.post('/send-mail-via-res', function (req, res) {
     return;
   };
 
-  app.sendEmail('email', {
+  res.mailer.send('email', {
     to: req.body.user.email,
     subject: 'Test Email'
   },
