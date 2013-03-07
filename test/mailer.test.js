@@ -32,6 +32,7 @@ describe('Mailer', function () {
           pass: 'TestApplication'
         }
       },
+      fakeMessage = 'fake message',
       fakeHTML = '<html><head><title>Test Email</title></head><body><h1>Title</h1><p>Lorem ipsum.</p></body></html>';
 
   describe('.version', function () {
@@ -60,7 +61,9 @@ describe('Mailer', function () {
 
       fakeSMTPTransport = fakes.stub();
       fakeSMTPTransport.sendMail = fakes.stub();
-      fakeSMTPTransport.sendMail.callsArg(1);
+      fakeSMTPTransport.sendMail.callsArgWith(1, null, {
+        message: fakeMessage
+      });
       fakeSMTPTransport.close = fakes.stub();
       fakeSMTPTransport.close.callsArg(0);
 
@@ -208,6 +211,28 @@ describe('Mailer', function () {
             fakeSMTPTransport.close.calledOnce.should.be.true;
             fakeNodemailer.createTransport.callCount.should.equal(2); // once for original, once for update;
             fakeNodemailer.createTransport.calledAfter(fakeSMTPTransport.close).should.be.true;
+            done();
+          });
+        });
+
+      });
+
+      describe('.render', function () {
+
+        var renderOptions = {
+              to: 'TestUser@localhost',
+              subject: 'Test Subject',
+              testProperty: 'testProperty'
+            };
+
+        it('should be a function', function (done) {
+          app.mailer.render.should.be.a('function');
+          done();
+        });
+
+        it('should callback with the message', function (done) {
+          app.mailer.render('template', renderOptions, function (err, message) {
+            message.should.equal(fakeMessage);
             done();
           });
         });
