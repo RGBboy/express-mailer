@@ -1,6 +1,6 @@
 # express-mailer
 
-Send Emails from the response object.
+Send Emails from your application and response object.
 
 [![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
 
@@ -84,12 +84,12 @@ html
 
 ## Sending an email
 
-You can send an email by calling `app.sendEmail(template, options, callback)`.
+You can send an email by calling `app.mailer.send(template, options, callback)`.
 To send an email using the template above you could write:
 
 ```javascript
 app.get('/', function (req, res, next) {
-  app.sendEmail('email', {
+  app.mailer.send('email', {
     to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
     subject: 'Test Email', // REQUIRED.
     otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
@@ -105,12 +105,12 @@ app.get('/', function (req, res, next) {
 });
 ```
 
-You can also send an email by calling `res.sendEmail(template, options, callback)`.
+You can also send an email by calling `res.mailer.send(template, options, callback)`.
 To send an email using the template above you could write:
 
 ```javascript
 app.get('/', function (req, res, next) {
-  res.sendEmail('email', {
+  res.mailer.send('email', {
     to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
     subject: 'Test Email', // REQUIRED.
     otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
@@ -125,6 +125,11 @@ app.get('/', function (req, res, next) {
   });
 });
 ```
+
+## Updating the configuration
+
+You can update your original configuration by calling `app.mailer.update(updatedOptions, callback)`.
+This can be processor intensive so changes to your configuration are best kept to a minimum.
 
 ## Notes
 
@@ -134,7 +139,7 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 ## To Do
 
 * Add ability to curry the from address.
-* Add checking of options when .sendEmail is called.
+* Add checking of options when .mailer.send is called.
 
 ## License 
 
