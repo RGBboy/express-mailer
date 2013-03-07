@@ -6,12 +6,10 @@ Send Emails from your application and response object.
 
 ## Note
 
-If you have updated express-mailer from Version 0.0.2 or earlier there 
-have been major API changes. Express Mailer now uses the extension 
-pattern and acts off the application object. Usage instructions are 
-detailed below. The change now allows you to send emails from outside of 
-your routes. For example you could now emit an event from your model and 
-have your application respond with an email.
+If you have updated express-mailer from Version 0.1.2 or earlier there 
+have been major API changes. The `app.sendEmail` method no longer gets 
+attached to the application. Instead a mailer object is attached. The 
+`app.sendEmail` functionality can now be accessed via `app.mailer.send`.
 
 ## Installation
 
@@ -149,6 +147,7 @@ app.get('/', function (req, res, next) {
       res.send('There was an error rendering the email');
       return;
     }
+    res.header('Content-Type', 'text/plain');
     res.send(message);
   });
 });
@@ -168,7 +167,7 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 
 (The MIT License)
 
-Copyright (c) 2012 RGBboy &lt;me@rgbboy.com&gt;
+Copyright (c) 2013 RGBboy &lt;me@rgbboy.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
