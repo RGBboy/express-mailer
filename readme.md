@@ -131,6 +131,29 @@ app.get('/', function (req, res, next) {
 You can update your original configuration by calling `app.mailer.update(updatedOptions, callback)`.
 This can be processor intensive so changes to your configuration are best kept to a minimum.
 
+## Rendering an email without sending
+
+You can render an email without sending it by calling `app.mailer.render(template, locals, callback)`.
+This can be used to check what an email will look like without sending it:
+
+```javascript
+app.get('/', function (req, res, next) {
+  res.mailer.render('email', {
+    to: 'example@example.com',
+    subject: 'Test Email',
+    otherProperty: 'Other Property'
+  }, function (err, message) {
+    if (err) {
+      // handle error
+      console.log(err);
+      res.send('There was an error rendering the email');
+      return;
+    }
+    res.send(message);
+  });
+});
+```
+
 ## Notes
 
 Mailchimp has a bunch of templates that may be a good starting point.
