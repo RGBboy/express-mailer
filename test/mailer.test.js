@@ -103,8 +103,13 @@ describe('Mailer', function () {
 
     describe('app.mailer', function () {
 
+      beforeEach(function (done) {
+        mailer.extend(app, mailerOptions);
+        done();
+      });
+
       it('should exist', function (done) {
-        
+        app.mailer.should.be.a('object');
         done();
       });
 
@@ -116,11 +121,6 @@ describe('Mailer', function () {
               subject: 'Test Subject',
               testProperty: 'testProperty'
             };
-
-        beforeEach(function (done) {
-          mailer.extend(app, mailerOptions);
-          done();
-        });
 
         it('should callback', function (done) {
           app.mailer.send('template', sendOptions, done);
