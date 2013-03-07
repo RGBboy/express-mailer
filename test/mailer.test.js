@@ -108,19 +108,23 @@ describe('Mailer', function () {
         done();
       });
 
-      it('should exist', function (done) {
+      it('should be an object', function (done) {
         app.mailer.should.be.a('object');
         done();
       });
 
       describe('.send', function () {
 
-        var send,
-            sendOptions = {
+        var sendOptions = {
               to: 'TestUser@localhost',
               subject: 'Test Subject',
               testProperty: 'testProperty'
             };
+
+        it('should be a function', function (done) {
+          app.mailer.send.should.be.a('function');
+          done();
+        });
 
         it('should callback', function (done) {
           app.mailer.send('template', sendOptions, done);
