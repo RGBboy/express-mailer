@@ -170,6 +170,15 @@ describe('Mailer', function () {
 
       });
 
+      describe('.update', function () {
+
+        it('should be a function', function (done) {
+          app.mailer.update.should.be.a('function');
+          done();
+        });
+
+      });
+
     });
 
     describe('middleware res.mailer', function () {
