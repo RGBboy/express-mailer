@@ -48,6 +48,23 @@ describe('Mailer', function () {
     });
   })
 
+  describe('GET /render-mail', function () {
+
+    it('should render the email', function (done) {
+
+      request
+        .get(baseURL + '/render-mail')
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          };
+          res.text.should.include('Subject: Test Email');
+          done();
+        });
+    });
+
+  });
+
   describe('POST /send-mail-via-app', function () {
 
     it('should send mail to me', function (done) {

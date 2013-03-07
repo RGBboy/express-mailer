@@ -34,6 +34,25 @@ app.get('/', function (req, res) {
   });
 });
 
+// render mail
+
+app.get('/render-mail', function (req, res) {
+  app.mailer.render('email', {
+    to: 'test@localhost',
+    subject: 'Test Email',
+    pretty: true
+  },
+  function (err, email) {
+    if (err) {
+      console.log('Sending Mail Failed!');
+      console.log(err);
+      return;
+    };
+    res.header('Content-Type', 'text/plain');
+    res.send(email);
+  });
+});
+
 // Send mail via the application object:
 
 app.get('/send-mail-via-app', function (req, res) {
