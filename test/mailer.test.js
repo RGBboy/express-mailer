@@ -61,6 +61,8 @@ describe('Mailer', function () {
       fakeSMTPTransport = fakes.stub();
       fakeSMTPTransport.sendMail = fakes.stub();
       fakeSMTPTransport.sendMail.callsArg(1);
+      fakeSMTPTransport.close = fakes.stub();
+      fakeSMTPTransport.close.callsArg(0);
 
       fakeNodemailer = fakes.stub();
       fakeNodemailer.createTransport = fakes.stub().returns(fakeSMTPTransport);
@@ -172,9 +174,42 @@ describe('Mailer', function () {
 
       describe('.update', function () {
 
+        var newOptions = {
+              from: 'NewTestApplication@localhost',
+              host: mailerOptions.host,
+              secureConnection: mailerOptions.secureConnection,
+              port: mailerOptions.port,
+              auth: {
+                user: mailerOptions.auth.user,
+                pass: mailerOptions.auth.pass
+              }
+            };
+
         it('should be a function', function (done) {
           app.mailer.update.should.be.a('function');
           done();
+        });
+
+        it('should callback', function (done) {
+          app.mailer.update(newOptions, done);
+        });
+
+        it('should close the current transport', function (done) {
+          app.mailer.update(newOptions, function (err) {
+            should.not.exist(err);
+            fakeSMTPTransport.close.calledOnce.should.be.true;
+            done();
+          });
+        });
+
+        it('should create a new transport after closing', function (done) {
+          app.mailer.update(newOptions, function (err) {
+            should.not.exist(err);
+            fakeSMTPTransport.close.calledOnce.should.be.true;
+            fakeNodemailer.createTransport.callCount.should.equal(2); // once for original, once for update;
+            fakeNodemailer.createTransport.calledAfter(fakeSMTPTransport.close).should.be.true;
+            done();
+          });
         });
 
       });
