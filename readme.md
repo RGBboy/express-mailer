@@ -124,6 +124,31 @@ app.get('/', function (req, res, next) {
 });
 ```
 
+## Sending an email with nodemailer options
+
+You can provider nodemailer settings as well. This allows you to send attachments for instance.
+
+```javascript
+app.get('/', function (req, res, next) {
+  app.mailer.send('email', {
+    to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
+    subject: 'Test Email', // REQUIRED.
+    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
+  },
+  {
+    attachments : [{fileName: 'File.extension', filePath: /path/to/file}]
+  }, function (err) {
+    if (err) {
+      // handle error
+      console.log(err);
+      res.send('There was an error sending the email');
+      return;
+    }
+    res.send('Email Sent');
+  });
+});
+```
+
 ## Updating the configuration
 
 You can update your original configuration by calling `app.mailer.update(updatedOptions, callback)`.
