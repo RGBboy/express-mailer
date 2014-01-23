@@ -30,7 +30,7 @@ describe('Mailer', function () {
     // app.setTimeout does not exist in node 0.8
     if (app.setTimeout) {
       // Set server timeout so connections close;
-      app.setTimeout(200);
+      app.setTimeout(500);
     };
     baseURL = 'http://localhost:' + port;
     fakeEmail = 'test@test.com';
