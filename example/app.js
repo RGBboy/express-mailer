@@ -116,7 +116,7 @@ app.post('/send-mail-via-res', function (req, res) {
 // Send mail via an updated mailer object:
 
 app.get('/send-mail-with-update', function (req, res) {
-  res.render('send-mail-via-update', {
+  res.render('send-mail-with-update', {
     title: 'Send Mail With Update'
   });
 });
