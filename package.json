@@ -3,8 +3,12 @@
   "version": "0.2.0",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RGBboy/express-mailer.git"
+  },
   "keywords": ["express", "email", "mail", "smtp"],
-  "author": "RGBboy <me@rgbboy.com>",
+  "author": "RGBboy <l-_-l@rgbboy.com>",
   "contributors": [{
     "name": "Daniel Bretoi",
     "email": "daniel@bretoi.com"
