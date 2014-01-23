@@ -20,16 +20,15 @@ describe('Mailer', function () {
 
   var user,
       baseURL,
-      server,
       fakeEmail,
       mailbox;
 
   before(function (done) {
     // Start up my app
     var port = 8000;
-    server = app.listen(port);
+    app.listen(port);
     // Set server timeout so connections close;
-    server.setTimeout(200);
+    app.setTimeout(200);
     baseURL = 'http://localhost:' + port;
     fakeEmail = 'test@test.com';
     mailbox = new Mailbox({
@@ -45,7 +44,7 @@ describe('Mailer', function () {
   after(function (done) {
     //close mailbox and app
     mailbox.close(function() {
-      server.close(function() {
+      app.close(function() {
         done();
       });
     });
