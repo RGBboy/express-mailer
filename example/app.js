@@ -7,7 +7,8 @@
  */
 
 var express = require('express'),
-    app = module.exports = express(),
+    app = express(),
+    server = module.exports = require('http').createServer(app),
     mailer = require('../index'),
     config = require('./config')
     currentMailerOptions = config.mailer;
@@ -164,6 +165,6 @@ app.use(express.errorHandler());
  */
 
 if (!module.parent) {
-  app.listen(8000);
+  server.listen(8000);
   console.log('Express app started on port 8000');
 };
