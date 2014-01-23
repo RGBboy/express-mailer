@@ -27,8 +27,11 @@ describe('Mailer', function () {
     // Start up my app
     var port = 8000;
     app.listen(port);
-    // Set server timeout so connections close;
-    app.setTimeout(200);
+    // app.setTimeout does not exist in node 0.8
+    if (app.setTimeout) {
+      // Set server timeout so connections close;
+      app.setTimeout(200);
+    };
     baseURL = 'http://localhost:' + port;
     fakeEmail = 'test@test.com';
     mailbox = new Mailbox({
