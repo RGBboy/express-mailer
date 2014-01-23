@@ -28,11 +28,14 @@ describe('Mailer', function () {
     // Start up my app
     var port = 8000;
     server = app.listen(port);
+    // Set server timeout so connections close;
+    server.setTimeout(200);
     baseURL = 'http://localhost:' + port;
     fakeEmail = 'test@test.com';
     mailbox = new Mailbox({
       address: fakeEmail,
-      auth: config.mailer.auth
+      auth: config.mailer.auth,
+      timeout: 500
     });
 
     mailbox.listen(config.mailer.port, done);
