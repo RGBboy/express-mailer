@@ -15,7 +15,7 @@
   },
   "main": "index",
   "engines": {
-    "node": "0.8.x"
+    "node": ">=0.8.0"
   },
   "dependencies": {
     "nodemailer": "0.3.x"
