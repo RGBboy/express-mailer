@@ -53,6 +53,8 @@ describe('Mailer', function () {
 
       fakeReq = fakes.stub();
       fakeRes = fakes.stub();
+      fakeRes.render = fakes.stub();
+      fakeRes.render.callsArgWith(2, null, fakeHTML);
 
       app = fakes.stub();
       app.render = fakes.stub();
@@ -243,19 +245,52 @@ describe('Mailer', function () {
 
     describe('middleware res.mailer', function () {
 
+      var middleware,
+          sendOptions = {
+            to: 'TestUser@localhost',
+            subject: 'Test Subject',
+            testProperty: 'testProperty'
+          };
+
       beforeEach(function (done) {
         mailer.extend(app, mailerOptions);
+        middleware = app.use.args[0][0];
+        middleware(fakeReq, fakeRes, done);
+      });
+
+      it('should call app.use once', function (done) {
+        app.use.calledOnce.should.be.true;
         done();
       });
 
+      // This should fail
       it('should equal app.mailer', function (done) {
-        app.use.calledOnce.should.be.true;
-        var middleware = app.use.args[0][0];
-        middleware(fakeReq, fakeRes, function (err) {
-          fakeRes.mailer.should.equal(app.mailer);
-          should.not.exist(err);
-          done();
-        })
+        fakeRes.mailer.should.equal(app.mailer);
+        done();
+      });
+
+      describe('res.mailer.send', function () {
+
+        it('should call res.render with template and options', function (done) {
+          fakeRes.mailer.send('template', sendOptions, function (err) {
+            fakeRes.render.calledOnce.should.be.true;
+            fakeRes.render.calledWith('template', sendOptions);
+            done(err);
+          });
+        });
+
+      });
+
+      describe('res.mailer.render', function () {
+
+        it('should call res.render with template and options', function (done) {
+          fakeRes.mailer.render('template', sendOptions, function (err) {
+            fakeRes.render.calledOnce.should.be.true;
+            fakeRes.render.calledWith('template', sendOptions);
+            done(err);
+          });
+        });
+
       });
 
     });
