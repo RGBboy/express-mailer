@@ -314,8 +314,6 @@ describe('Mailer', function () {
 
       });
 
-
-
       describe('res.mailer.render', function () {
 
         it('should be a function', function (done) {
@@ -329,6 +327,15 @@ describe('Mailer', function () {
             fakeRes.render.calledWith('template', sendOptions);
             done(err);
           });
+        });
+
+      });
+
+      describe('res.mailer.update', function () {
+
+        it('should equal app.mailer.update', function (done) {
+          fakeRes.mailer.update.should.equal(app.mailer.update);
+          done();
         });
 
       });
