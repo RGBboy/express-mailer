@@ -53,6 +53,8 @@ describe('Mailer', function () {
 
       fakeReq = fakes.stub();
       fakeRes = fakes.stub();
+      fakeRes.render = fakes.stub();
+      fakeRes.render.callsArgWith(2, null, fakeHTML);
 
       app = fakes.stub();
       app.render = fakes.stub();
@@ -243,19 +245,92 @@ describe('Mailer', function () {
 
     describe('middleware res.mailer', function () {
 
+      var middleware,
+          sendOptions = {
+            to: 'TestUser@localhost',
+            subject: 'Test Subject',
+            testProperty: 'testProperty'
+          };
+
       beforeEach(function (done) {
         mailer.extend(app, mailerOptions);
+        middleware = app.use.args[0][0];
+        middleware(fakeReq, fakeRes, done);
+      });
+
+      it('should call app.use once', function (done) {
+        app.use.calledOnce.should.be.true;
         done();
       });
 
-      it('should equal app.mailer', function (done) {
-        app.use.calledOnce.should.be.true;
-        var middleware = app.use.args[0][0];
-        middleware(fakeReq, fakeRes, function (err) {
-          fakeRes.mailer.should.equal(app.mailer);
-          should.not.exist(err);
+      describe('res.mailer.send', function () {
+
+        it('should be a function', function (done) {
+          fakeRes.mailer.send.should.be.a('function');
           done();
-        })
+        });
+
+        it('should callback', function (done) {
+          fakeRes.mailer.send('template', sendOptions, done);
+        });
+
+        it('should call res.render with template and options', function (done) {
+          fakeRes.mailer.send('template', sendOptions, function (err) {
+            fakeRes.render.calledOnce.should.be.true;
+            fakeRes.render.calledWith('template', sendOptions);
+            done(err);
+          });
+        });
+
+        it('should callback with error if application.render fails', function (done) {
+          fakeRes.render.callsArgWith(2, new Error());
+          fakeRes.mailer.send('template', sendOptions, function (err) {
+            err.should.exist;
+            fakeSMTPTransport.sendMail.called.should.be.false;
+            done();
+          });
+        });
+
+        it('should call smtpTransport.sendMail with correct options', function (done) {
+          fakeRes.mailer.send('template', sendOptions, function (err) {
+            fakeSMTPTransport.sendMail.calledOnce.should.be.true;
+            var args = fakeSMTPTransport.sendMail.args[0][0];
+            args.from.should.equal(mailerOptions.from)
+            args.to.should.equal(sendOptions.to)
+            args.subject.should.equal(sendOptions.subject)
+            args.generateTextFromHTML.should.be.true;
+            args.html.should.equal(fakeHTML);
+            done(err);
+          });
+        });
+
+        it('should callback with error if smtpTransport.sendMail fails', function (done) {
+          fakeSMTPTransport.sendMail.callsArgWith(1, new Error());
+          fakeRes.mailer.send('template', sendOptions, function (err) {
+            err.should.exist;
+            done();
+          });
+        });
+
+      });
+
+
+
+      describe('res.mailer.render', function () {
+
+        it('should be a function', function (done) {
+          fakeRes.mailer.render.should.be.a('function');
+          done();
+        });
+
+        it('should call res.render with template and options', function (done) {
+          fakeRes.mailer.render('template', sendOptions, function (err) {
+            fakeRes.render.calledOnce.should.be.true;
+            fakeRes.render.calledWith('template', sendOptions);
+            done(err);
+          });
+        });
+
       });
 
     });
