@@ -22,7 +22,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "nodemailer": "0.3.x"
+    "nodemailer": "0.x.x"
   },
   "devDependencies": {
     "express": "3.x.x",
