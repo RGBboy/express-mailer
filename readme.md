@@ -43,9 +43,10 @@ mailer.extend(app, {
 
 ## Views
 
-Mailer views use the same render process as Express. You can use any view engine that Express supports.
-Setting up views for mailer is exactly the same as setting up views for Express. For example, to set the
-view directory to `project/views` and view engine to `jade` you would write:
+Mailer views use the same render process as Express. You can use any view 
+engine that Express supports. Setting up views for mailer is exactly the same 
+as setting up views for Express. For example, to set the view directory to 
+`project/views` and view engine to `jade` you would write:
 
 ```javascript
 // project/app.js
@@ -82,7 +83,7 @@ html
 
 ## Sending an email
 
-You can send an email by calling `app.mailer.send(template, options, callback)`.
+You can send an email by calling `app.mailer.send(sendOptions, locals, callback)`.
 To send an email using the template above you could write:
 
 ```javascript
@@ -103,26 +104,32 @@ app.get('/', function (req, res, next) {
 });
 ```
 
-You can also send an email by calling `res.mailer.send(template, options, callback)`.
-To send an email using the template above you could write:
+You can also send an email by calling mailer on an applications response 
+object: `res.mailer.send(template, options, callback)`.
 
-```javascript
-app.get('/', function (req, res, next) {
-  res.mailer.send('email', {
-    to: 'example@example.com', // REQUIRED. This can be a comma delimited string just like a normal email to field. 
-    subject: 'Test Email', // REQUIRED.
-    otherProperty: 'Other Property' // All additional properties are also passed to the template as local variables.
-  }, function (err) {
-    if (err) {
-      // handle error
-      console.log(err);
-      res.send('There was an error sending the email');
-      return;
-    }
-    res.send('Email Sent');
-  });
-});
-```
+## Nodemailer options
+
+It is also possible to change the options supplied to nodemailers `sendMail` 
+function. Instead of passing in the template name to `mailer.send` or 
+`mailer.render` you can pass an object with any of the following fields:
+
+  * **from** - The e-mail address of the sender. All e-mail addresses can be plain `sender@server.com` or formatted `Sender Name <sender@server.com>`
+  * **to** - Comma separated list or an array of recipients e-mail addresses that will appear on the `To:` field
+  * **cc** - Comma separated list or an array of recipients e-mail addresses that will appear on the `Cc:` field
+  * **bcc** - Comma separated list or an array of recipients e-mail addresses that will appear on the `Bcc:` field
+  * **replyTo** - An e-mail address that will appear on the `Reply-To:` field
+  * **inReplyTo** - The message-id this message is replying
+  * **references** - Message-id list
+  * **subject** - The subject of the e-mail
+  * **headers** - An object of additional header fields `{"X-Key-Name": "key value"}` (NB! values are passed as is, you should do your own encoding to 7bit and folding if needed)
+  * **attachments** - An array of attachment objects.
+  * **alternatives** - An array of alternative text contents (in addition to text and html parts)
+  * **envelope** - optional SMTP envelope, if auto generated envelope is not suitable
+  * **messageId** - optional Message-Id value, random value will be generated if not set. Set to false to omit the Message-Id header
+  * **date** - optional Date value, current UTC string will be used if not set
+  * **encoding** - optional transfer encoding for the textual parts (defaults to "quoted-printable")
+  * **charset** - optional output character set for the textual parts (defaults to "utf-8")
+  * **dsn** - An object with methods `success`, `failure` and `delay`. If any of these are set to true, DSN will be used
 
 ## Updating the configuration
 
@@ -167,7 +174,7 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 
 (The MIT License)
 
-Copyright (c) 2013 RGBboy &lt;me@rgbboy.com&gt;
+Copyright (c) 2014 RGBboy &lt;l-_-l@rgbboy.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
