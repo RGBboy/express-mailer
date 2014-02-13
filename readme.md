@@ -83,7 +83,7 @@ html
 
 ## Sending an email
 
-You can send an email by calling `app.mailer.send(sendOptions, locals, callback)`.
+You can send an email by calling `app.mailer.send(template, locals, callback)`.
 To send an email using the template above you could write:
 
 ```javascript
@@ -131,6 +131,28 @@ function. Instead of passing in the template name to `mailer.send` or
   * **encoding** - optional transfer encoding for the textual parts (defaults to "quoted-printable")
   * **charset** - optional output character set for the textual parts (defaults to "utf-8")
   * **dsn** - An object with methods `success`, `failure` and `delay`. If any of these are set to true, DSN will be used
+
+For example you could cc others with the previous example like this:
+
+```javascript
+app.mailer.send(
+  {
+    template: 'email', // REQUIRED
+    cc: 'cc@example.com'
+  },
+  {
+    to: 'example@example.com',
+    subject: 'Test Email',
+    otherProperty: 'Other Property'
+  },
+  function (err) {
+    if (err) {
+      // handle error
+    };
+      // mail sent!
+  }
+);
+```
 
 ## Updating the configuration
 
