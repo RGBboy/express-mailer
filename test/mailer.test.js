@@ -124,6 +124,7 @@ describe('Mailer', function () {
 
         var locals = {
               to: 'TestUser@localhost',
+              replyTo: 'TestUser@localhost',
               subject: 'Test Subject',
               testProperty: 'testProperty'
             };
@@ -154,6 +155,7 @@ describe('Mailer', function () {
               var args = fakeSMTPTransport.sendMail.args[0][0];
               args.from.should.equal(mailerOptions.from)
               args.to.should.equal(locals.to)
+              args.replyTo.should.equal(locals.replyTo)
               args.subject.should.equal(locals.subject)
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
@@ -179,6 +181,7 @@ describe('Mailer', function () {
               template: 'template',
               from: 'from',
               to: 'to',
+              replyTo: 'replyTo',
               subject: 'subject',
               attachments: ['test', 'test', 'test']
             };
@@ -187,6 +190,7 @@ describe('Mailer', function () {
               var args = fakeSMTPTransport.sendMail.args[0][0];
               args.from.should.equal('from');
               args.to.should.equal('to');
+              args.replyTo.should.equal('replyTo');
               args.subject.should.equal('subject');
               args.attachments.should.equal(sendOptions.attachments)
               args.generateTextFromHTML.should.be.true;
@@ -287,6 +291,7 @@ describe('Mailer', function () {
       var middleware,
           locals = {
             to: 'TestUser@localhost',
+            replyTo: 'TestUser@localhost',
             subject: 'Test Subject',
             testProperty: 'testProperty'
           };
@@ -331,6 +336,7 @@ describe('Mailer', function () {
               var args = fakeSMTPTransport.sendMail.args[0][0];
               args.from.should.equal(mailerOptions.from)
               args.to.should.equal(locals.to)
+              args.replyTo.should.equal(locals.replyTo)
               args.subject.should.equal(locals.subject)
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
@@ -356,6 +362,7 @@ describe('Mailer', function () {
               template: 'template',
               from: 'from',
               to: 'to',
+              replyTo: 'replyTo',
               subject: 'subject',
               attachments: ['test', 'test', 'test']
             };
@@ -364,6 +371,7 @@ describe('Mailer', function () {
               var args = fakeSMTPTransport.sendMail.args[0][0];
               args.from.should.equal('from');
               args.to.should.equal('to');
+              args.replyTo.should.equal('replyTo');
               args.subject.should.equal('subject');
               args.attachments.should.equal(sendOptions.attachments);
               args.generateTextFromHTML.should.be.true;
