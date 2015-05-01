@@ -125,6 +125,8 @@ describe('Mailer', function () {
         var locals = {
               to: 'TestUser@localhost',
               replyTo: 'TestUser@localhost',
+                cc: 'TestUser@localhost',
+                bcc: 'TestUser@localhost',
               subject: 'Test Subject',
               testProperty: 'testProperty'
             };
