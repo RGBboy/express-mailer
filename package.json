@@ -19,20 +19,20 @@
   },
   "main": "index",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "dependencies": {
-    "nodemailer": "0.x.x"
+    "nodemailer": "^0.7.1"
   },
   "devDependencies": {
-    "express": "3.x.x",
-    "jade": "0.27.x",
-    "mocha": "1.5.x",
-    "superagent": "0.9.x",
-    "should": "1.2.x",
-    "sinon": "1.4.x",
-    "rewire": "1.0.x",
-    "test-mailbox": "0.0.x"
+    "express": "^3.20.2",
+    "jade": "^0.27.7",
+    "mocha": "^1.5.0",
+    "superagent": "^0.9.10",
+    "should": "^1.2.2",
+    "sinon": "^1.4.2",
+    "rewire": "^1.0.4",
+    "test-mailbox": "^0.0.6"
   },
   "scripts" : {
     "test" : "make test",
