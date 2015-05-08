@@ -125,8 +125,8 @@ describe('Mailer', function () {
         var locals = {
               to: 'TestUser@localhost',
               replyTo: 'TestUser@localhost',
-                cc: 'TestUser@localhost',
-                bcc: 'TestUser@localhost',
+              cc: 'TestUser@localhost',
+              bcc: 'TestUser@localhost',
               subject: 'Test Subject',
               testProperty: 'testProperty'
             };
@@ -155,10 +155,12 @@ describe('Mailer', function () {
             app.mailer.send('template', locals, function (err) {
               fakeSMTPTransport.sendMail.calledOnce.should.be.true;
               var args = fakeSMTPTransport.sendMail.args[0][0];
-              args.from.should.equal(mailerOptions.from)
-              args.to.should.equal(locals.to)
-              args.replyTo.should.equal(locals.replyTo)
-              args.subject.should.equal(locals.subject)
+              args.from.should.equal(mailerOptions.from);
+              args.to.should.equal(locals.to);
+              args.replyTo.should.equal(locals.replyTo);
+              args.cc.should.equal(locals.cc);
+              args.bcc.should.equal(locals.bcc);
+              args.subject.should.equal(locals.subject);
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
               done(err);
@@ -179,22 +181,26 @@ describe('Mailer', function () {
           });
 
           it('should call smtpTransport.sendMail with sendOptions options', function (done) {
-            var sendOptions = { 
+            var sendOptions = {
               template: 'template',
               from: 'from',
               to: 'to',
               replyTo: 'replyTo',
+              cc: 'cc',
+              bcc: 'bcc',
               subject: 'subject',
               attachments: ['test', 'test', 'test']
             };
             app.mailer.send(sendOptions, locals, function (err) {
               fakeSMTPTransport.sendMail.calledOnce.should.be.true;
               var args = fakeSMTPTransport.sendMail.args[0][0];
-              args.from.should.equal('from');
-              args.to.should.equal('to');
-              args.replyTo.should.equal('replyTo');
-              args.subject.should.equal('subject');
-              args.attachments.should.equal(sendOptions.attachments)
+              args.from.should.equal(sendOptions.from);
+              args.to.should.equal(sendOptions.to);
+              args.replyTo.should.equal(sendOptions.replyTo);
+              args.cc.should.equal(sendOptions.cc);
+              args.bcc.should.equal(sendOptions.bcc);
+              args.subject.should.equal(sendOptions.subject);
+              args.attachments.should.equal(sendOptions.attachments);
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
               done(err);
@@ -294,6 +300,8 @@ describe('Mailer', function () {
           locals = {
             to: 'TestUser@localhost',
             replyTo: 'TestUser@localhost',
+            cc: 'TestUser@localhost',
+            bcc: 'TestUser@localhost',
             subject: 'Test Subject',
             testProperty: 'testProperty'
           };
@@ -336,10 +344,12 @@ describe('Mailer', function () {
             fakeRes.mailer.send(sendOptions, locals, function (err) {
               fakeSMTPTransport.sendMail.calledOnce.should.be.true;
               var args = fakeSMTPTransport.sendMail.args[0][0];
-              args.from.should.equal(mailerOptions.from)
-              args.to.should.equal(locals.to)
-              args.replyTo.should.equal(locals.replyTo)
-              args.subject.should.equal(locals.subject)
+              args.from.should.equal(mailerOptions.from);
+              args.to.should.equal(locals.to);
+              args.replyTo.should.equal(locals.replyTo);
+              args.cc.should.equal(locals.cc);
+              args.bcc.should.equal(locals.bcc);
+              args.subject.should.equal(locals.subject);
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
               done(err);
@@ -360,21 +370,25 @@ describe('Mailer', function () {
           });
 
           it('should call smtpTransport.sendMail with sendOptions options', function (done) {
-            var sendOptions = { 
+            var sendOptions = {
               template: 'template',
               from: 'from',
               to: 'to',
               replyTo: 'replyTo',
+              cc: 'cc',
+              bcc: 'bcc',
               subject: 'subject',
               attachments: ['test', 'test', 'test']
             };
             fakeRes.mailer.send(sendOptions, locals, function (err) {
               fakeSMTPTransport.sendMail.calledOnce.should.be.true;
               var args = fakeSMTPTransport.sendMail.args[0][0];
-              args.from.should.equal('from');
-              args.to.should.equal('to');
-              args.replyTo.should.equal('replyTo');
-              args.subject.should.equal('subject');
+              args.from.should.equal(sendOptions.from);
+              args.to.should.equal(sendOptions.to);
+              args.replyTo.should.equal(sendOptions.replyTo);
+              args.cc.should.equal(sendOptions.cc);
+              args.bcc.should.equal(sendOptions.bcc);
+              args.subject.should.equal(sendOptions.subject);
               args.attachments.should.equal(sendOptions.attachments);
               args.generateTextFromHTML.should.be.true;
               args.html.should.equal(fakeHTML);
