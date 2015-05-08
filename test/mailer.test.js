@@ -35,15 +35,6 @@ describe('Mailer', function () {
       fakeMessage = 'fake message',
       fakeHTML = '<html><head><title>Test Email</title></head><body><h1>Title</h1><p>Lorem ipsum.</p></body></html>';
 
-  describe('.version', function () {
-
-    it('should match the format x.x.x', function (done) {
-      mailer.version.should.match(/^\d+\.\d+\.\d+$/);
-      done();
-    });
-
-  });
-
   describe('.extend', function () {
 
     var app;
