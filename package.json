@@ -1,6 +1,6 @@
 {
   "name": "express-mailer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",
   "repository": {
