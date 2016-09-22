@@ -60,7 +60,7 @@ Then we can write our templates in Jade:
 ```javascript
 // project/views/email.jade
 
-!!! transitional
+doctype transitional
 html
   head
     meta(http-equiv = 'Content-Type', content = 'text/html; charset=UTF-8')
