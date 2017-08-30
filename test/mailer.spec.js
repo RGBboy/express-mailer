@@ -33,7 +33,7 @@ describe('Mailer', function () {
       app.setTimeout(1500);
     };
     baseURL = 'http://localhost:' + port;
-    fakeEmail = 'test@test.com';
+    fakeEmail = 'test@localhost';
     mailbox = new Mailbox({
       address: fakeEmail,
       auth: config.mailer.auth,
@@ -56,14 +56,19 @@ describe('Mailer', function () {
   describe('GET /render-mail', function () {
 
     it('should render the email', function (done) {
+
+      mailbox.once('newMail', function (mail) {
+        mail.html.should.include('<title>Test Email</title>');
+        done();
+      });
       request
         .get(baseURL + '/render-mail')
         .end(function (err, res) {
           if (err) {
             return done(err);
           };
-          res.text.should.include('Subject: Test Email');
-          done();
+          // res.text.should.include('Subject: Test Email');
+          // done();
         });
     });
 
@@ -102,6 +107,7 @@ describe('Mailer', function () {
         mail.html.should.include('<title>Test Email</title>');
         done();
       });
+
       request
         .post(baseURL + '/send-mail-via-res')
         .send({ 
@@ -113,7 +119,6 @@ describe('Mailer', function () {
           if (err) {
             return done(err);
           }
-          // return done();
         });
     });
 

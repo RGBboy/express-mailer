@@ -5,6 +5,12 @@
 /**
  * Module Dependencies
  */
+var testing = false;
+
+if( testing )
+  process.env.NODE_ENV = 'test';
+if( process.env.NODE_ENV == 'test' )
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 var express = require('express'),
     app = express(),
@@ -168,7 +174,6 @@ app.post('/send-mail-with-update', function (req, res, next) {
     res.redirect('back');
     return;
   };
-
   if (currentMailerOptions === config.mailer) {
     currentMailerOptions = config.mailerUpdate;
   } else {
@@ -220,3 +225,25 @@ if (!module.parent) {
   server.listen(port);
   console.log('Express app started on port 8000');
 };
+
+if( testing ) {
+  var Mailbox = require('test-mailbox'),
+  user,
+  baseURL,
+  fakeEmail,
+  mailbox;
+  baseURL = 'http://localhost:' + port;
+  fakeEmail = 'test@localhost';
+  mailbox = new Mailbox({
+    address: fakeEmail,
+    auth: config.mailer.auth,
+    timeout: 500
+  });
+
+  mailbox.listen(config.mailer.port, function( err ) {
+    if( err )
+      console.log( err)
+  });
+
+  mailbox.on('newMail', console.log);
+}
