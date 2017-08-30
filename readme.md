@@ -30,9 +30,9 @@ var app = require('express')(),
 mailer.extend(app, {
   from: 'no-reply@example.com',
   host: 'smtp.gmail.com', // hostname
-  secureConnection: true, // use SSL
-  port: 465, // port for secure SMTP
-  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
+  port: 465, // port for secure SMTP, true for 465, false for other ports
+  secure: true, // use SSL
+  transportMethod: 'SMTP', // optional : default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'gmail.user@gmail.com',
     pass: 'userpass'
@@ -60,7 +60,7 @@ Then we can write our templates in Jade:
 ```javascript
 // project/views/email.jade
 
-!!! transitional
+doctype transitional
 html
   head
     meta(http-equiv = 'Content-Type', content = 'text/html; charset=UTF-8')
