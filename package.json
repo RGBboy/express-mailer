@@ -1,6 +1,6 @@
 {
   "name": "nodemailer-for-express",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/virginielgb/express-mailer",
   "repository": {
