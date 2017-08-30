@@ -25,7 +25,7 @@ describe('Mailer', function () {
       mailerOptions = {
         from: 'TestApplication@localhost',
         host: 'localhost', // hostname
-        secureConnection: true, // use SSL
+        secure: true, // use SSL
         port: 8465, // port for secure SMTP
         auth: {
           user: 'TestApplication',
@@ -224,7 +224,7 @@ describe('Mailer', function () {
         var newOptions = {
               from: 'NewTestApplication@localhost',
               host: mailerOptions.host,
-              secureConnection: mailerOptions.secureConnection,
+              secure: mailerOptions.secure,
               port: mailerOptions.port,
               auth: {
                 user: mailerOptions.auth.user,

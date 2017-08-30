@@ -1,5 +1,5 @@
 {
-  "name": "express-mailer",
+  "name": "express-mailer-v",
   "version": "0.4.1",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",

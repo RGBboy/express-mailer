@@ -10,8 +10,9 @@ var express = require('express'),
     app = express(),
     server = module.exports = require('http').createServer(app),
     mailer = require('../index'),
-    config = require('./config')
-    currentMailerOptions = config.mailer;
+    config = require('./config'),
+    currentMailerOptions = config.mailer,
+    bodyParser = require( 'body-parser' );
 
 mailer.extend(app, currentMailerOptions);
 
@@ -26,7 +27,7 @@ app.set('view engine', 'jade');
 
 // Configuration
 
-app.use(express.bodyParser());
+app.use( bodyParser.urlencoded( { extended: false , limit : '10mb' } ) );
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
@@ -38,7 +39,7 @@ app.get('/', function (req, res) {
 // render mail
 
 app.get('/render-mail', function (req, res) {
-  app.mailer.render('email', {
+  app.mailer.send('email', {
     to: 'test@localhost',
     subject: 'Test Email',
     pretty: true
@@ -158,7 +159,17 @@ app.post('/send-mail-with-update', function (req, res, next) {
 });
 
 // Error Handler
-app.use(express.errorHandler());
+// app.use(express.errorHandler());
+
+app.all( '*' , handleError );
+
+function handleError( err , req , res , next ) {
+  console.log( 'ERROR HANLDER HAS BEEN CALLED...' );
+  console.log( err );
+  console.error( err.stack );
+  res.send( 500 , err.message );
+    return;
+}
 
 /**
  * Module exports.
