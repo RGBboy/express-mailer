@@ -46,19 +46,19 @@ mailer.extend(app, {
 Mailer views use the same render process as Express. You can use any view 
 engine that Express supports. Setting up views for mailer is exactly the same 
 as setting up views for Express. For example, to set the view directory to 
-`project/views` and view engine to `jade` you would write:
+`project/views` and view engine to `pug` you would write:
 
 ```javascript
 // project/app.js
 
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 ```
 
-Then we can write our templates in Jade:
+Then we can write our templates in Pug:
 
 ```javascript
-// project/views/email.jade
+// project/views/email.pug
 
 doctype transitional
 html
