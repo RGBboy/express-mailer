@@ -1,25 +1,30 @@
 {
   "name": "express-mailer-v",
-  "version": "0.4.1",
+  "version": "0.4.0",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RGBboy/express-mailer.git"
+    "url": "http://github.com/RGBboy/express-mailer"
   },
-  "keywords": ["express", "email", "mail", "smtp"],
+  "keywords": [
+    "express",
+    "email",
+    "mail",
+    "smtp"
+  ],
   "author": "RGBboy <l-_-l@rgbboy.com>",
-  "contributors": [{
-    "name": "Daniel Bretoi",
-    "email": "daniel@bretoi.com"
-  },{
-    "name": "Virginie Le Guen Bertheaume",
-    "email": "virginie@virginielgb.com"
-  }],
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/RGBboy/express-mailer"
-  },
+  "contributors": [
+    {
+      "name": "Daniel Bretoi",
+      "email": "daniel@bretoi.com"
+    },
+    {
+      "name": "Virginie Le Guen Bertheaume",
+      "email": "virginie@virginielgb.com"
+    }
+  ],
+  "license": "MIT",
   "main": "index",
   "engines": {
     "node": ">=6.0.0"
@@ -28,8 +33,9 @@
     "nodemailer": "^4.1.0"
   },
   "devDependencies": {
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "jade": "^0.27.7",
+    "pug": "^2.0.0-rc.3",
     "mocha": "^3.5.0",
     "rewire": "^1.0.4",
     "test-mailbox": "^0.0.6",
@@ -37,9 +43,9 @@
     "sinon": "^3.2.1",
     "superagent": "^0.9.10"
   },
-  "scripts" : {
-    "test" : "make test",
-    "unit" : "make unit",
-    "spec" : "make spec"
+  "scripts": {
+    "test": "make test",
+    "unit": "make unit",
+    "spec": "make spec"
   }
 }

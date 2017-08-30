@@ -23,7 +23,7 @@ app.locals.testFunction = function () {
 
 // Views
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // Configuration
 
