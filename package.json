@@ -35,13 +35,14 @@
   "devDependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "pug": "^2.0.0-rc.3",
     "mocha": "^3.5.0",
+    "morgan": "^1.8.2",
+    "pug": "^2.0.0-rc.3",
     "rewire": "^1.0.4",
-    "test-mailbox": "^0.0.6",
     "should": "^1.2.2",
     "sinon": "^3.2.1",
-    "superagent": "^0.9.10"
+    "superagent": "^3.6.0",
+    "test-mailbox": "^0.0.6"
   },
   "scripts": {
     "test": "make test",

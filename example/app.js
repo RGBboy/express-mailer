@@ -11,11 +11,11 @@ var express = require('express'),
     server = module.exports = require('http').createServer(app),
     mailer = require('../index'),
     config = require('./config'),
+    morgan = require( 'morgan' );
     currentMailerOptions = config.mailer,
     bodyParser = require( 'body-parser' );
 
 mailer.extend(app, currentMailerOptions);
-
 app.locals.testVariable = 'Test Variable';
 app.locals.testFunction = function () {
   return 'Test Function';
@@ -27,7 +27,9 @@ app.set('view engine', 'pug');
 
 // Configuration
 
+app.use( morgan( 'dev' ) );
 app.use( bodyParser.urlencoded( { extended: false , limit : '10mb' } ) );
+app.use( bodyParser.json() );
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
@@ -39,7 +41,7 @@ app.get('/', function (req, res) {
 // render mail
 
 app.get('/render-mail', function (req, res) {
-  app.mailer.send('email', {
+  app.mailer.render('email', {
     to: 'test@localhost',
     subject: 'Test Email',
     pretty: true
@@ -47,7 +49,8 @@ app.get('/render-mail', function (req, res) {
   function (err, email) {
     if (err) {
       console.log('Sending Mail Failed!');
-      console.log(err);
+      console.log(err , email);
+      res.redirect('back');
       return;
     };
     res.header('Content-Type', 'text/plain');
@@ -64,8 +67,19 @@ app.get('/send-mail-via-app', function (req, res) {
 });
 
 app.post('/send-mail-via-app', function (req, res) {
-
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
@@ -78,6 +92,7 @@ app.post('/send-mail-via-app', function (req, res) {
     if (err) {
       console.log('Sending Mail Failed!');
       console.log(err);
+      res.redirect('back');
       return;
     };
     res.redirect('/');
@@ -94,8 +109,19 @@ app.get('/send-mail-via-res', function (req, res) {
 });
 
 app.post('/send-mail-via-res', function (req, res) {
-
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
@@ -108,6 +134,7 @@ app.post('/send-mail-via-res', function (req, res) {
     if (err) {
       console.log('Sending Mail Failed!');
       console.log(err);
+      res.redirect('back');
       return;
     };
     res.redirect('/');
@@ -125,7 +152,19 @@ app.get('/send-mail-with-update', function (req, res) {
 
 app.post('/send-mail-with-update', function (req, res, next) {
 
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
@@ -150,6 +189,7 @@ app.post('/send-mail-with-update', function (req, res, next) {
       if (err) {
         console.log('Sending Mail Failed!');
         console.log(err);
+        res.redirect('back');
         return;
       };
       res.redirect('/');
@@ -175,7 +215,8 @@ function handleError( err , req , res , next ) {
  * Module exports.
  */
 
+var port = 8000;
 if (!module.parent) {
-  server.listen(8000);
+  server.listen(port);
   console.log('Express app started on port 8000');
 };

@@ -30,7 +30,7 @@ describe('Mailer', function () {
     // app.setTimeout does not exist in node 0.8
     if (app.setTimeout) {
       // Set server timeout so connections close;
-      app.setTimeout(500);
+      app.setTimeout(1500);
     };
     baseURL = 'http://localhost:' + port;
     fakeEmail = 'test@test.com';
@@ -56,7 +56,6 @@ describe('Mailer', function () {
   describe('GET /render-mail', function () {
 
     it('should render the email', function (done) {
-
       request
         .get(baseURL + '/render-mail')
         .end(function (err, res) {
@@ -103,7 +102,6 @@ describe('Mailer', function () {
         mail.html.should.include('<title>Test Email</title>');
         done();
       });
-
       request
         .post(baseURL + '/send-mail-via-res')
         .send({ 
@@ -115,6 +113,7 @@ describe('Mailer', function () {
           if (err) {
             return done(err);
           }
+          // return done();
         });
     });
 
