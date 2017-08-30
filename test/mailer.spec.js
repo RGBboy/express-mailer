@@ -30,10 +30,10 @@ describe('Mailer', function () {
     // app.setTimeout does not exist in node 0.8
     if (app.setTimeout) {
       // Set server timeout so connections close;
-      app.setTimeout(500);
+      app.setTimeout(1500);
     };
     baseURL = 'http://localhost:' + port;
-    fakeEmail = 'test@test.com';
+    fakeEmail = 'test@localhost';
     mailbox = new Mailbox({
       address: fakeEmail,
       auth: config.mailer.auth,
@@ -57,14 +57,18 @@ describe('Mailer', function () {
 
     it('should render the email', function (done) {
 
+      mailbox.once('newMail', function (mail) {
+        mail.html.should.include('<title>Test Email</title>');
+        done();
+      });
       request
         .get(baseURL + '/render-mail')
         .end(function (err, res) {
           if (err) {
             return done(err);
           };
-          res.text.should.include('Subject: Test Email');
-          done();
+          // res.text.should.include('Subject: Test Email');
+          // done();
         });
     });
 

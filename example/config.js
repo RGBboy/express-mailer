@@ -5,7 +5,7 @@ var config = {
     mailer: {
       from: 'TestApplication@localhost',
       host: 'smtp.gmail.com', // hostname
-      secureConnection: true, // use SSL
+      secure: true, // use SSL
       port: 465, // port for secure SMTP
       auth: {
         user: process.env.GMAIL_USERNAME,
@@ -15,7 +15,7 @@ var config = {
     mailerUpdate: {
       from: 'UpdatedTestApplication@localhost',
       host: 'smtp.gmail.com', // hostname
-      secureConnection: true, // use SSL
+      secure: true, // use SSL
       port: 465, // port for secure SMTP
       auth: {
         user: process.env.GMAIL_USERNAME,
@@ -27,7 +27,7 @@ var config = {
     mailer: {
       from: 'TestApplication@localhost',
       host: 'localhost', // hostname
-      secureConnection: true, // use SSL
+      secure: true, // use SSL
       port: 8465, // test port for secure SMTP
       auth: {
         user: 'TestApplication',
@@ -37,7 +37,7 @@ var config = {
     mailerUpdate: {
       from: 'UpdatedTestApplication@localhost',
       host: 'localhost',
-      secureConnection: true,
+      secure: true,
       port: 8465,
       auth: {
         user: 'TestApplication',

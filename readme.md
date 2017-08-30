@@ -1,15 +1,8 @@
-# express-mailer
+# nodemailer-for-express 
 
-Send Emails from your application and response object.
+Send Emails from your application and response object. Forked from https://github.com/RGBboy/express-mailer
 
-[![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
-
-## Note
-
-If you have updated express-mailer from Version 0.1.2 or earlier there 
-have been major API changes. The `app.sendEmail` method no longer gets 
-attached to the application. Instead a mailer object is attached. The 
-`app.sendEmail` functionality can now be accessed via `app.mailer.send`.
+[![Build Status](https://secure.travis-ci.org/virginielgb/express-mailer.png)](http://travis-ci.org/virginielgb/express-mailer)
 
 ## Installation
 
@@ -30,9 +23,9 @@ var app = require('express')(),
 mailer.extend(app, {
   from: 'no-reply@example.com',
   host: 'smtp.gmail.com', // hostname
-  secureConnection: true, // use SSL
-  port: 465, // port for secure SMTP
-  transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
+  port: 465, // port for secure SMTP, true for 465, false for other ports
+  secure: true, // use SSL
+  transportMethod: 'SMTP', // optional : default is SMTP. Accepts anything that nodemailer accepts
   auth: {
     user: 'gmail.user@gmail.com',
     pass: 'userpass'
@@ -46,21 +39,21 @@ mailer.extend(app, {
 Mailer views use the same render process as Express. You can use any view 
 engine that Express supports. Setting up views for mailer is exactly the same 
 as setting up views for Express. For example, to set the view directory to 
-`project/views` and view engine to `jade` you would write:
+`project/views` and view engine to `pug` you would write:
 
 ```javascript
 // project/app.js
 
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 ```
 
-Then we can write our templates in Jade:
+Then we can write our templates in Pug:
 
 ```javascript
-// project/views/email.jade
+// project/views/email.pug
 
-!!! transitional
+doctype transitional
 html
   head
     meta(http-equiv = 'Content-Type', content = 'text/html; charset=UTF-8')
@@ -188,6 +181,8 @@ app.get('/', function (req, res, next) {
 Mailchimp has a bunch of templates that may be a good starting point.
 Check them out at https://github.com/mailchimp/Email-Blueprints
 
+Requires node version 6.0 or above.
+
 ## To Do
 
 * Add ability to curry the from address.
@@ -197,6 +192,7 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 
 (The MIT License)
 
+Copyright (c) 2017 VirginieLGB &lt;virginie@virginielgb.com&gt;
 Copyright (c) 2014 RGBboy &lt;l-_-l@rgbboy.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining

@@ -5,16 +5,23 @@
 /**
  * Module Dependencies
  */
+var testing = false;
+
+if( testing )
+  process.env.NODE_ENV = 'test';
+if( process.env.NODE_ENV == 'test' )
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 var express = require('express'),
     app = express(),
     server = module.exports = require('http').createServer(app),
     mailer = require('../index'),
-    config = require('./config')
-    currentMailerOptions = config.mailer;
+    config = require('./config'),
+    morgan = require( 'morgan' );
+    currentMailerOptions = config.mailer,
+    bodyParser = require( 'body-parser' );
 
 mailer.extend(app, currentMailerOptions);
-
 app.locals.testVariable = 'Test Variable';
 app.locals.testFunction = function () {
   return 'Test Function';
@@ -22,11 +29,13 @@ app.locals.testFunction = function () {
 
 // Views
 app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // Configuration
 
-app.use(express.bodyParser());
+app.use( morgan( 'dev' ) );
+app.use( bodyParser.urlencoded( { extended: false , limit : '10mb' } ) );
+app.use( bodyParser.json() );
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function (req, res) {
@@ -46,7 +55,8 @@ app.get('/render-mail', function (req, res) {
   function (err, email) {
     if (err) {
       console.log('Sending Mail Failed!');
-      console.log(err);
+      console.log(err , email);
+      res.redirect('back');
       return;
     };
     res.header('Content-Type', 'text/plain');
@@ -63,8 +73,19 @@ app.get('/send-mail-via-app', function (req, res) {
 });
 
 app.post('/send-mail-via-app', function (req, res) {
-
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
@@ -77,6 +98,7 @@ app.post('/send-mail-via-app', function (req, res) {
     if (err) {
       console.log('Sending Mail Failed!');
       console.log(err);
+      res.redirect('back');
       return;
     };
     res.redirect('/');
@@ -93,8 +115,19 @@ app.get('/send-mail-via-res', function (req, res) {
 });
 
 app.post('/send-mail-via-res', function (req, res) {
-
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
@@ -107,6 +140,7 @@ app.post('/send-mail-via-res', function (req, res) {
     if (err) {
       console.log('Sending Mail Failed!');
       console.log(err);
+      res.redirect('back');
       return;
     };
     res.redirect('/');
@@ -124,11 +158,22 @@ app.get('/send-mail-with-update', function (req, res) {
 
 app.post('/send-mail-with-update', function (req, res, next) {
 
-  if(!req.body.user || !req.body.user.email) {
+  if( req.body[ 'user[email]'] ) {
+    req.body.user = {
+      email : req.body[ 'user[email]']
+    };
+    delete req.body[ 'user[email]'];
+  }
+  if( !req.body.user ) {
+    console.log( 'No body sent' , req.body , req.query );
+    res.redirect('back');
+    return;
+  }
+  if(!req.body.user.email) {
+    console.log( 'Information missing' , req.body );
     res.redirect('back');
     return;
   };
-
   if (currentMailerOptions === config.mailer) {
     currentMailerOptions = config.mailerUpdate;
   } else {
@@ -149,6 +194,7 @@ app.post('/send-mail-with-update', function (req, res, next) {
       if (err) {
         console.log('Sending Mail Failed!');
         console.log(err);
+        res.redirect('back');
         return;
       };
       res.redirect('/');
@@ -158,13 +204,46 @@ app.post('/send-mail-with-update', function (req, res, next) {
 });
 
 // Error Handler
-app.use(express.errorHandler());
+// app.use(express.errorHandler());
+
+app.all( '*' , handleError );
+
+function handleError( err , req , res , next ) {
+  console.log( 'ERROR HANLDER HAS BEEN CALLED...' );
+  console.log( err );
+  console.error( err.stack );
+  res.send( 500 , err.message );
+    return;
+}
 
 /**
  * Module exports.
  */
 
+var port = 8000;
 if (!module.parent) {
-  server.listen(8000);
+  server.listen(port);
   console.log('Express app started on port 8000');
 };
+
+if( testing ) {
+  var Mailbox = require('test-mailbox'),
+  user,
+  baseURL,
+  fakeEmail,
+  mailbox;
+  baseURL = 'http://localhost:' + port;
+  fakeEmail = 'test@localhost';
+  mailbox = new Mailbox({
+    address: fakeEmail,
+    auth: config.mailer.auth,
+    timeout: 500
+  });
+
+  mailbox.listen(config.mailer.port, function( err ) {
+    if( err )
+      console.log( err)
+  });
+
+  mailbox.on('newMail', console.log);
+}
