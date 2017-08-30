@@ -1,6 +1,6 @@
 {
   "name": "express-mailer",
-  "version": "0.3.1",
+  "version": "0.4.1",
   "description": "Send Emails from your express application",
   "homepage": "https://github.com/RGBboy/express-mailer",
   "repository": {
@@ -12,6 +12,9 @@
   "contributors": [{
     "name": "Daniel Bretoi",
     "email": "daniel@bretoi.com"
+  },{
+    "name": "Virginie Le Guen Bertheaume",
+    "email": "virginie@virginielgb.com"
   }],
   "repository" : {
     "type" : "git",
@@ -19,20 +22,20 @@
   },
   "main": "index",
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=6.0.0"
   },
   "dependencies": {
-    "nodemailer": "^0.7.1"
+    "nodemailer": "^4.1.0"
   },
   "devDependencies": {
-    "express": "^3.20.2",
+    "express": "^4.15.3",
     "jade": "^0.27.7",
-    "mocha": "^1.5.0",
-    "superagent": "^0.9.10",
-    "should": "^1.2.2",
-    "sinon": "^1.4.2",
+    "mocha": "^3.5.0",
     "rewire": "^1.0.4",
     "test-mailbox": "^0.0.6"
+    "should": "^1.2.2",
+    "sinon": "^3.2.1",
+    "superagent": "^0.9.10",
   },
   "scripts" : {
     "test" : "make test",
