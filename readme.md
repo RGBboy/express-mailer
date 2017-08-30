@@ -1,15 +1,8 @@
-# express-mailer
+# nodemailer-for-express 
 
 Send Emails from your application and response object. Forked from https://github.com/RGBboy/express-mailer
 
-[![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
-
-## Note
-
-If you have updated express-mailer from Version 0.1.2 or earlier there 
-have been major API changes. The `app.sendEmail` method no longer gets 
-attached to the application. Instead a mailer object is attached. The 
-`app.sendEmail` functionality can now be accessed via `app.mailer.send`.
+[![Build Status](https://secure.travis-ci.org/virginielgb/express-mailer.png)](http://travis-ci.org/virginielgb/express-mailer)
 
 ## Installation
 
