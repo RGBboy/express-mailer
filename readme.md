@@ -1,6 +1,6 @@
 # express-mailer
 
-Send Emails from your application and response object.
+Send Emails from your application and response object. Forked from https://github.com/RGBboy/express-mailer
 
 [![Build Status](https://secure.travis-ci.org/RGBboy/express-mailer.png)](http://travis-ci.org/RGBboy/express-mailer)
 
@@ -188,6 +188,8 @@ app.get('/', function (req, res, next) {
 Mailchimp has a bunch of templates that may be a good starting point.
 Check them out at https://github.com/mailchimp/Email-Blueprints
 
+Requires node version 6.0 or above.
+
 ## To Do
 
 * Add ability to curry the from address.
@@ -197,6 +199,7 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 
 (The MIT License)
 
+Copyright (c) 2017 VirginieLGB &lt;virginie@virginielgb.com&gt;
 Copyright (c) 2014 RGBboy &lt;l-_-l@rgbboy.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
