@@ -32,10 +32,10 @@
     "jade": "^0.27.7",
     "mocha": "^3.5.0",
     "rewire": "^1.0.4",
-    "test-mailbox": "^0.0.6"
+    "test-mailbox": "^0.0.6",
     "should": "^1.2.2",
     "sinon": "^3.2.1",
-    "superagent": "^0.9.10",
+    "superagent": "^0.9.10"
   },
   "scripts" : {
     "test" : "make test",
