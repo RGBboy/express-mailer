@@ -190,8 +190,8 @@ Check them out at https://github.com/mailchimp/Email-Blueprints
 
 ## To Do
 
-* Add ability to curry the from address.
-* Add checking of options when .mailer.send is called.
+* Add ability to carry the from address.
+* Add checking of options when `.mailer.send` is called.
 
 ## License 
 
